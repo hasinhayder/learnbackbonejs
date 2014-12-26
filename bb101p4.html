@@ -2,7 +2,7 @@
 
 <head>
 <meta charset="utf-8">
-<title>bb101p3</title>
+<title>bb101p4</title>
 <style type="text/css">
 body {
   font-family: Helvetica, arial, sans-serif;
@@ -437,56 +437,42 @@ pre[class*="language-"] {
 </style>
 </head>
 <body>
-<h2 id="toc_0">ব্যাকবোন মডেল ব্যবহার শুরু করা</h2>
+<h2 id="toc_0">ব্যাকবোন মডেলে মেথড যোগ করা</h2>
 
-<p>ব্যাকবোন মডেল হল আপনার অ্যাপ্লিকেশনের ডেটা সহজে স্টোর করার জন্য একধরনের অবজেক্ট। জাভাস্ক্রিপ্টে একে লেখা হয় JSON হিসেবে। অন্যান্য ডেটা-স্ট্রাকচার (যেমন অ্যারে) এর  মত ব্যাকবোন মডেলের ব্যবহার ও খুবই সহজ। কিন্তু এর বিভিন্ন প্রপার্টি, ইভেন্ট এবং মেথডের সমন্বয়ে এটি পরিণত হয়েছে অত্যন্ত শক্তিশালী এবং উপকারী একটি  ডেটা-স্ট্রাকচারে। চলুন দেখি কিভাবে ব্যাকবোন মডেল ইনিশিয়ালাইজ করা যায় </p>
-
-<pre><code class="language-javascript">var person = Backbone.Model.extend({
-    //that&#39;s it :)
-});
-</code></pre>
-
-<p>উপরের কোডের মাধ্যমে <code>person</code> নামে একটি ব্যাকবোন মডেল ইনিশিয়ালাইজ করা হয়েছে। আমরা এতে এক্সট্রা কোন ডেটা বা মেথড যোগ করিনি, জাস্ট ডিফল্ট ব্যাকবোন মডেল অবজেক্ট কে এক্সটেন্ড করেছি। চলুন একে ব্যবহার করা যাক </p>
-
-<pre><code class="language-javascript">var p1 = new person();
-
-p1.set(&quot;firstName&quot;, &quot;Aron&quot;);
-p1.set(&quot;lastName&quot;, &quot;Strongfield&quot;);
-p1.set(&quot;age&quot;, 31);
-
-//or we can write like this, all at once
-
-p1.set({
-    firstName: &quot;Aron&quot;,
-    lastName: &quot;Strongfield&quot;,
-    age: 31
-});
-
-console.log(p1.get(&quot;firstName&quot;), p1.get(&quot;lastName&quot;)); 
-// this will output &quot;Aron Strongfield&quot;
-</code></pre>
-
-<h3 id="toc_1">ব্যাকবোন মডেলে ডিফল্ট ভ্যালু যোগ করা</h3>
-
-<p>আমরা চাইলেই ব্যাকবোন মডেলে ডিফল্ট কিছু ভ্যালু রেখে দিতে পারি। পরবর্তীতে মডেলটি ইনিশিয়ালাইজ করা হলে এই ভ্যালু গুলো সবসময়েই নতুন অবজেক্টটিতে পাওয়া যাবে. চলুন আমরা আগের <code>person</code> মডেলটিতে ডিফল্ট ভাবে <code>age</code>, <code>firstName</code> এবং <code>lastName</code> ভ্যালু গুলো যোগ করে একে নতুন ভাবে লিখি </p>
+<p>এর আগের আর্টিকেলে আমরা দেখেছি কিভাবে কিছু ডিফল্ট ভ্যালু সহ ব্যাকবোন মডেল ইনিশিয়ালাইজ করা যায়। এবার চলুন আমাদের মডেলে কিছু মেথড যোগ করি। নিচের কোডে আমরা <code>getName()</code> নামে একটি মেথড যোগ করব যার কাজ হবে আমাদের <code>person</code> মডেলের <code>firstName</code> এবং <code>lastName</code> একসাথে রিটার্ন দেয়া </p>
 
 <pre><code class="language-javascript">var person = Backbone.Model.extend({
     defaults:{
         firstName: &quot;The&quot;,
         lastName: &quot;Anonymous&quot;,
         age: 0
+    },
+    getName: function(){
+        return this.get(&quot;firstName&quot;) + &quot; &quot; + this.get(&quot;lastName&quot;);
     }
 });
+
+var p1 = new person({
+    firstName:&quot;Aron&quot;,
+    lastName:&quot;Springfield&quot;
+});
+
+console.log(p1.getName());
+//this will output  Aron Springfield
 </code></pre>
 
-<p>এবার নিচের কোডটুকু রান করুন </p>
+<p>উপরের কোডে খেয়াল করলে দেখবেন যে আমরা আমাদের <code>person</code> মডেলে <code>getName()</code> নামে একটি মেথড যোগ করেছি নিচের মত করে। আগেই বলেছি যে ব্যাকবোনের অবজেক্ট গুলো JSON ফরম্যাট এ লেখা হয়, তাই নতুন প্রপার্টি বা মেথড যোগ করতে গেলে কোডের এই স্ট্রাকচার টাই  অনুসরণ করা বাঞ্ছনীয়। </p>
 
-<pre><code class="language-javascript">var p1 = new person();
-console.log(p1.get(&quot;firstName&quot;), p1.get(&quot;lastName&quot;)); 
-// this will output &quot;The Anonymous&quot;
+<pre><code class="language-javascript">getName: function(){
+    return this.get(&quot;firstName&quot;) + &quot; &quot; + this.get(&quot;lastName&quot;);
+}
 </code></pre>
 
-<p><a href="bb101p4.html">পরবর্তী অংশ: ব্যাকবোন মডেলে একটি মেথড যোগ করা</a></p>
+<p>মেথডের ভেতর থেকে বর্তমান অবজেক্টের কোন প্রপার্টি অ্যাক্সেস করতে গেলে সেটা সবসময় <code>this</code> কি-ওয়ার্ড দিয়ে করতে হয়। জাভাস্ক্রিপ্টে কোন মেথড এর ভেতরে  <code>this</code> কি-ওয়ার্ডটি সবসময় যেই অবজেক্টের মাঝে থেকে কল করা হচ্ছে সেই অবজেক্ট এর রেফারেন্স হিসেবে কাজ করে </p>
+
+<p>আমরা চাইলে <code>this.get(&quot;firstName&quot;)</code> এর বদলে <code>this.attributes[&quot;firstName&quot;]</code> এভাবেও প্রপার্টির ভ্যালু অ্যাক্সেস করতে পারতাম, কিন্তু সেটা না করাই ভাল। প্রপার্টির ভ্যালু অ্যাক্সেস করতে গেলে সবসময় get() কিংবা set() মেথড দুটো ব্যবহার করা উচিত </p>
+
+<p>পূর্ববর্তী অংশ: <a href="bb101p3.html">ব্যাকবোন মডেল ব্যবহার শুরু করা</a>  | পরবর্তী অংশ: <a href="bb101p6.html">মডেলের ডেটা ভ্যালিডেশন</a></p>
 
 <script type="text/javascript">
 self="undefined"!=typeof window?window:"undefined"!=typeof WorkerGlobalScope&&self instanceof WorkerGlobalScope?self:{};var Prism=function(){var e=/\blang(?:uage)?-(?!\*)(\w+)\b/i,t=self.Prism={util:{encode:function(e){return e instanceof n?new n(e.type,t.util.encode(e.content),e.alias):"Array"===t.util.type(e)?e.map(t.util.encode):e.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/\u00a0/g," ")},type:function(e){return Object.prototype.toString.call(e).match(/\[object (\w+)\]/)[1]},clone:function(e){var n=t.util.type(e);switch(n){case"Object":var a={};for(var r in e)e.hasOwnProperty(r)&&(a[r]=t.util.clone(e[r]));return a;case"Array":return e.slice()}return e}},languages:{extend:function(e,n){var a=t.util.clone(t.languages[e]);for(var r in n)a[r]=n[r];return a},insertBefore:function(e,n,a,r){r=r||t.languages;var i=r[e],l={};for(var o in i)if(i.hasOwnProperty(o)){if(o==n)for(var s in a)a.hasOwnProperty(s)&&(l[s]=a[s]);l[o]=i[o]}return r[e]=l},DFS:function(e,n,a){for(var r in e)e.hasOwnProperty(r)&&(n.call(e,r,e[r],a||r),"Object"===t.util.type(e[r])?t.languages.DFS(e[r],n):"Array"===t.util.type(e[r])&&t.languages.DFS(e[r],n,r))}},highlightAll:function(e,n){for(var a,r=document.querySelectorAll('code[class*="language-"], [class*="language-"] code, code[class*="lang-"], [class*="lang-"] code'),i=0;a=r[i++];)t.highlightElement(a,e===!0,n)},highlightElement:function(a,r,i){for(var l,o,s=a;s&&!e.test(s.className);)s=s.parentNode;if(s&&(l=(s.className.match(e)||[,""])[1],o=t.languages[l]),o){a.className=a.className.replace(e,"").replace(/\s+/g," ")+" language-"+l,s=a.parentNode,/pre/i.test(s.nodeName)&&(s.className=s.className.replace(e,"").replace(/\s+/g," ")+" language-"+l);var c=a.textContent;if(c){var g={element:a,language:l,grammar:o,code:c};if(t.hooks.run("before-highlight",g),r&&self.Worker){var u=new Worker(t.filename);u.onmessage=function(e){g.highlightedCode=n.stringify(JSON.parse(e.data),l),t.hooks.run("before-insert",g),g.element.innerHTML=g.highlightedCode,i&&i.call(g.element),t.hooks.run("after-highlight",g)},u.postMessage(JSON.stringify({language:g.language,code:g.code}))}else g.highlightedCode=t.highlight(g.code,g.grammar,g.language),t.hooks.run("before-insert",g),g.element.innerHTML=g.highlightedCode,i&&i.call(a),t.hooks.run("after-highlight",g)}}},highlight:function(e,a,r){var i=t.tokenize(e,a);return n.stringify(t.util.encode(i),r)},tokenize:function(e,n){var a=t.Token,r=[e],i=n.rest;if(i){for(var l in i)n[l]=i[l];delete n.rest}e:for(var l in n)if(n.hasOwnProperty(l)&&n[l]){var o=n[l];o="Array"===t.util.type(o)?o:[o];for(var s=0;s<o.length;++s){var c=o[s],g=c.inside,u=!!c.lookbehind,f=0,h=c.alias;c=c.pattern||c;for(var p=0;p<r.length;p++){var d=r[p];if(r.length>e.length)break e;if(!(d instanceof a)){c.lastIndex=0;var m=c.exec(d);if(m){u&&(f=m[1].length);var y=m.index-1+f,m=m[0].slice(f),v=m.length,k=y+v,b=d.slice(0,y+1),w=d.slice(k+1),N=[p,1];b&&N.push(b);var O=new a(l,g?t.tokenize(m,g):m,h);N.push(O),w&&N.push(w),Array.prototype.splice.apply(r,N)}}}}}return r},hooks:{all:{},add:function(e,n){var a=t.hooks.all;a[e]=a[e]||[],a[e].push(n)},run:function(e,n){var a=t.hooks.all[e];if(a&&a.length)for(var r,i=0;r=a[i++];)r(n)}}},n=t.Token=function(e,t,n){this.type=e,this.content=t,this.alias=n};if(n.stringify=function(e,a,r){if("string"==typeof e)return e;if("[object Array]"==Object.prototype.toString.call(e))return e.map(function(t){return n.stringify(t,a,e)}).join("");var i={type:e.type,content:n.stringify(e.content,a,r),tag:"span",classes:["token",e.type],attributes:{},language:a,parent:r};if("comment"==i.type&&(i.attributes.spellcheck="true"),e.alias){var l="Array"===t.util.type(e.alias)?e.alias:[e.alias];Array.prototype.push.apply(i.classes,l)}t.hooks.run("wrap",i);var o="";for(var s in i.attributes)o+=s+'="'+(i.attributes[s]||"")+'"';return"<"+i.tag+' class="'+i.classes.join(" ")+'" '+o+">"+i.content+"</"+i.tag+">"},!self.document)return self.addEventListener?(self.addEventListener("message",function(e){var n=JSON.parse(e.data),a=n.language,r=n.code;self.postMessage(JSON.stringify(t.util.encode(t.tokenize(r,t.languages[a])))),self.close()},!1),self.Prism):self.Prism;var a=document.getElementsByTagName("script");return a=a[a.length-1],a&&(t.filename=a.src,document.addEventListener&&!a.hasAttribute("data-manual")&&document.addEventListener("DOMContentLoaded",t.highlightAll)),self.Prism}();"undefined"!=typeof module&&module.exports&&(module.exports=Prism);
